@@ -7,8 +7,12 @@
 <script>
 YUI().use("mtg-prices", function(Y){
     
-    Y.YQL(Y.MTG.query, function(r) {
-        Y.log(r.query.results);
+    var set = new Y.MTG.Set({name: "Revised Edition"});
+    set.load(function(err, response) {
+        if (!err) {
+            Y.log(response);
+        }
     });
+
 });
 </script>
