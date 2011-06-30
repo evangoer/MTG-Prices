@@ -8,7 +8,7 @@
 YUI().use("mtg-prices", function(Y){
     
     Y.YQL(Y.MTG.query, function(r) {
-        Y.log(r.query.results.strong);
+        Y.log(r.query.results);
     });
 });
 </script>
