@@ -10,6 +10,7 @@ YUI().use("mtg-prices", function(Y){
     var cardSet = new Y.MTG.Set({name: "Revised Edition"});
     cardSet.load(function(err, response) {
         if (!err) {
+            Y.log(Y.JSON.parse(localStorage.getItem("Revised Edition")));
             Y.log(cardSet.get("cards"));
         }
         
