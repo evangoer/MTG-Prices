@@ -13,16 +13,12 @@ YUI().use("mtg-prices", function(Y){
             Y.log(setNames.get("setNames"));
         }
     });
-    
-    /*
-    var cardSet = new Y.MTG.Set({name: "Revised Edition"});
+
+    var cardSet = new Y.MTG.Set({id: "Revised Edition"});
     cardSet.load(function(err, response) {
         if (!err) {
-            Y.log(Y.JSON.parse(localStorage.getItem("Revised Edition")));
             Y.log(cardSet.get("cards"));
         }
-        
-    });*/
-
+    });
 });
 </script>
