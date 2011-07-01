@@ -17,7 +17,7 @@ YUI().use("mtg-prices", function(Y){
     var cardSet = new Y.MTG.Set({id: "Revised Edition"});
     cardSet.load(function(err, response) {
         if (!err) {
-            Y.log(cardSet.get("cards"));
+            Y.log(cardSet.get("data"));
         }
     });
 });
