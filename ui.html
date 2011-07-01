@@ -6,11 +6,11 @@
 <script src="./lib/mtg_prices.js"></script>
 <script>
 YUI().use("mtg-prices", function(Y){
-    //localStorage.clear();
+    localStorage.clear();
     var setNames = new Y.MTG.SetNames();
     setNames.load(function(err, response){
         if (!err) {
-            Y.log(setNames.get("setNames"));
+            Y.log(setNames.get("data"));
         }
     });
 
