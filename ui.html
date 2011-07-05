@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <title>Magic: The Gathering Price Fetcher</title>
-<h1>Magic: The Gathering Price Fetcher</title>
+<h1>Magic: The Gathering Price Fetcher</h1>
+
+<form><input id="setNameInput" type="text" /> <input id="setNameInput" type="text" /></form>
 
 <script src="http://yui.yahooapis.com/3.4.0pr2/build/yui/yui-min.js"></script>
 <script src="./lib/mtg_prices.js"></script>
 <script>
-YUI().use("mtg-prices", function(Y){
+YUI().use("mtg-prices", "autocomplete-plugin", "autocomplete-highlighters", "autocomplete-filters", function(Y){
     //localStorage.clear();
     var setNames = new Y.MTG.SetNames();
+    var setNameInput = Y.one("#setNameInput");
+    var cardNameInput = Y.one("#cardNameInput");
+    
     setNames.load(function(err, response){
         if (!err) {
-            Y.log(setNames.get("data"));
+            setNameInput.plug(Y.Plugin.AutoComplete, {
+                resultHighlighter: "phraseMatch",
+                resultFilters: "phraseMatch",
+                source: setNames.get("data")
+            });
         }
     });
 
