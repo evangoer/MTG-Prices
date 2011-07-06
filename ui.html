@@ -39,5 +39,22 @@ YUI().use("mtg-prices", "autocomplete-plugin", "autocomplete-highlighters", "aut
             });
         }
     });
+    
+    setNameInput.on("change", function() {
+        Y.log("Changed!");
+        // Need a ModelList to hold CardSets
+        // Is the value of setNameInput contained in setNames?
+        //  - if not, 
+        //      - this is an invalid set (or you need to re-sync remotely)
+        //      - set an error message
+        //      - set some error flag so that other elements on the page respond appropriately
+        // Is the value of setNameInput in the ModelList? 
+        //  - if so, set the cardNameInput AutoComplete source to that card set's data object
+        //  - if not,
+        //      - set a "loading data" message
+        //      - create a new CardSet and add it to the ModelList
+        //      - load the data remotely
+        //      - eliminate the "loading data message"
+    })
 });
 </script>
