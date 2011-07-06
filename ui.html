@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 <title>Magic: The Gathering Price Fetcher</title>
+<style>
+    b.yui3-highlight {}
+    li.yui3-aclist-item {}
+    ul.yui3-aclist-list {}
+</style>
 <h1>Magic: The Gathering Price Fetcher</h1>
 
-<form><input id="setNameInput" type="text" /> <input id="cardNameInput" type="text" /></form>
+<form>
+    <label>Set: <input id="setNameInput" type="text" /></label> 
+    <label>Card: <input id="cardNameInput" type="text" /></label>
+    <label>Count: <input id="countInput" type="text" size="4" value="1" /></label>
+</form>
 
 <script src="http://yui.yahooapis.com/3.4.0pr2/build/yui/yui-min.js"></script>
 <script src="./lib/mtg_prices.js"></script>
