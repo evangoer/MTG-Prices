@@ -2,7 +2,7 @@
 <title>Magic: The Gathering Price Fetcher</title>
 <h1>Magic: The Gathering Price Fetcher</h1>
 
-<form><input id="setNameInput" type="text" /> <input id="setNameInput" type="text" /></form>
+<form><input id="setNameInput" type="text" /> <input id="cardNameInput" type="text" /></form>
 
 <script src="http://yui.yahooapis.com/3.4.0pr2/build/yui/yui-min.js"></script>
 <script src="./lib/mtg_prices.js"></script>
@@ -10,6 +10,7 @@
 YUI().use("mtg-prices", "autocomplete-plugin", "autocomplete-highlighters", "autocomplete-filters", function(Y){
     //localStorage.clear();
     var setNames = new Y.MTG.SetNames();
+    var cardSet = new Y.MTG.Set({id: "Revised Edition"});
     var setNameInput = Y.one("#setNameInput");
     var cardNameInput = Y.one("#cardNameInput");
     
@@ -23,10 +24,13 @@ YUI().use("mtg-prices", "autocomplete-plugin", "autocomplete-highlighters", "aut
         }
     });
 
-    var cardSet = new Y.MTG.Set({id: "Revised Edition"});
     cardSet.load(function(err, response) {
         if (!err) {
-            Y.log(cardSet.get("data"));
+            cardNameInput.plug(Y.Plugin.AutoComplete, {
+                resultHighlighter: "phraseMatch",
+                resultFilters: "phraseMatch",
+                source: Y.Object.keys(cardSet.get("data"))
+            });
         }
     });
 });
