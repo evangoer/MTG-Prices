@@ -16,7 +16,13 @@
 YUI().use("mtg-prices", "autocomplete-plugin", "autocomplete-highlighters", "autocomplete-filters", function(Y){
     //localStorage.clear();
     var setNames = new Y.MTG.SetNames();
-    var cardSet = new Y.MTG.Set({id: "Revised Edition"});
+    //var cardSet = new Y.MTG.Set({id: "Revised Edition"});
+    var cardSet;
+    var setList = new Y.MTG.SetList();
+    setList.add(new Y.MTG.Set({id: "Revised Edition"}));
+    cardSet = setList.getById("Revised Edition");
+    
+    
     var setNameInput = Y.one("#setNameInput");
     var cardNameInput = Y.one("#cardNameInput");
     
