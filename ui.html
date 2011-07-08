@@ -16,12 +16,7 @@
 YUI().use("mtg-prices", "autocomplete-plugin", "autocomplete-highlighters", "autocomplete-filters", function(Y){
     //localStorage.clear();
     var setNames = new Y.MTG.SetNames();
-    //var cardSet = new Y.MTG.Set({id: "Revised Edition"});
-    var cardSet;
-    var setList = new Y.MTG.SetList();
-//    setList.add(new Y.MTG.Set({id: "Revised Edition"}));
-//    cardSet = setList.getById("Revised Edition");
-    
+    var setList = new Y.MTG.SetList();    
     
     var setNameInput = Y.one("#setNameInput");
     var cardNameInput = Y.one("#cardNameInput");
@@ -36,48 +31,43 @@ YUI().use("mtg-prices", "autocomplete-plugin", "autocomplete-highlighters", "aut
         }
     });
 
+    cardNameInput.plug(Y.Plugin.AutoComplete, {
+        resultHighlighter: "phraseMatch",
+        resultFilters: "phraseMatch",
+        source: []
+    });
     
     setNameInput.on("change", function(e) {
         var setName = e.target.get("value");
-        var nameList = setNames.get("data");
-        var set = null;
+        var set, source;
         
-        if (Y.Array.indexOf(nameList, setName) === -1) {
+        // setName must belong to the list of valid set names
+        if (Y.Array.indexOf(setNames.get("data"), setName) === -1) {
             Y.log("OH NOES BAD SET NAME!!!");
-            // set some error message
-            // make sure other elements on the page respond appropriately
+            // set some error message, blah blah
             return;
         }
     
-        // Is the value of setNameInput in the ModelList? 
-        //  - if so, set the cardNameInput AutoComplete source to that card set's data object
-        //  - if not,
-        //      - set a "loading data" message
-        //      - create a new CardSet and add it to the ModelList
-        //      - load the data remotely
-        //      - eliminate the "loading data message"
+        // Does the SetList already contain the Set?
+        // If not, load it (this could be fast if in localStorage, slow otherwise) 
         set = setList.getById(setName);
         if (! set) {
-            // set a "loading data" message
-            // this will be fast if the set is in localStorage, slow otherwise
+            // TODO display a "loading data" message
             Y.log("loading; card set '" + setName + "' not found in set list.");
             set = new Y.MTG.Set({id: setName});
             set.load(function(err, response) {
-                Y.log(set.get("data"));
+                source = Y.Object.keys(set.get("data"));
+                cardNameInput.ac.set("source", source);
             });
             setList.add(set);
-            // eliminate the "loading data" message
+            // TODO eliminate the "loading data" message
         }
         else {
             Y.log("card set '" + setName + "' found in set list.");
-            Y.log(set.get("data"));
+            source = Y.Object.keys(set.get("data"));
+            cardNameInput.ac.set("source", source);
         }
-        /*
-        cardNameInput.plug(Y.Plugin.AutoComplete, {
-            resultHighlighter: "phraseMatch",
-            resultFilters: "phraseMatch",
-            source: Y.Object.keys(set.get("data"))
-        });*/
+        // TODO bad things happen when you try to load "Urza's Destiny" and related sets
     })
 });
 </script>
