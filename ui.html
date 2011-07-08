@@ -39,7 +39,7 @@ YUI().use("mtg-prices", "autocomplete-plugin", "autocomplete-highlighters", "aut
     
     setNameInput.on("change", function(e) {
         var setName = e.target.get("value");
-        var set, source;
+        var set, cards;
         
         // setName must belong to the list of valid set names
         if (Y.Array.indexOf(setNames.get("data"), setName) === -1) {
@@ -47,27 +47,26 @@ YUI().use("mtg-prices", "autocomplete-plugin", "autocomplete-highlighters", "aut
             // set some error message, blah blah
             return;
         }
-    
-        // Does the SetList already contain the Set?
-        // If not, load it (this could be fast if in localStorage, slow otherwise) 
+        
+        // Does the SetList already contain the Set? If not, create the Set and add it to the SetList
         set = setList.getById(setName);
         if (! set) {
-            // TODO display a "loading data" message
-            Y.log("loading; card set '" + setName + "' not found in set list.");
             set = new Y.MTG.Set({id: setName});
-            set.load(function(err, response) {
-                source = Y.Object.keys(set.get("data"));
-                cardNameInput.ac.set("source", source);
-            });
             setList.add(set);
-            // TODO eliminate the "loading data" message
         }
-        else {
-            Y.log("card set '" + setName + "' found in set list.");
-            source = Y.Object.keys(set.get("data"));
-            cardNameInput.ac.set("source", source);
+
+        // Get cards, loading if necessary. Loading could be from fast localStorage or slow YQL.
+        cards = set.get("data");
+        if (! cards ) {
+            // TODO display a "loading data" message
+            set.load(function(err, response) {
+                cards = set.get("data");
+                // TODO eliminate the "loading data" message
+            });
         }
-        // TODO bad things happen when you try to load "Urza's Destiny" and related sets
+        cardNameInput.ac.set("source", Y.Object.keys(cards));
+        
+        // TODO bad things happen with YQL when you try to load "Urza's Destiny" and related sets
     })
 });
 </script>
