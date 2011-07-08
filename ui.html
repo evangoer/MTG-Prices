@@ -19,8 +19,8 @@ YUI().use("mtg-prices", "autocomplete-plugin", "autocomplete-highlighters", "aut
     //var cardSet = new Y.MTG.Set({id: "Revised Edition"});
     var cardSet;
     var setList = new Y.MTG.SetList();
-    setList.add(new Y.MTG.Set({id: "Revised Edition"}));
-    cardSet = setList.getById("Revised Edition");
+//    setList.add(new Y.MTG.Set({id: "Revised Edition"}));
+//    cardSet = setList.getById("Revised Edition");
     
     
     var setNameInput = Y.one("#setNameInput");
@@ -36,24 +36,19 @@ YUI().use("mtg-prices", "autocomplete-plugin", "autocomplete-highlighters", "aut
         }
     });
 
-    cardSet.load(function(err, response) {
-        if (!err) {
-            cardNameInput.plug(Y.Plugin.AutoComplete, {
-                resultHighlighter: "phraseMatch",
-                resultFilters: "phraseMatch",
-                source: Y.Object.keys(cardSet.get("data"))
-            });
-        }
-    });
     
-    setNameInput.on("change", function() {
-        Y.log("Changed!");
-        // Need a ModelList to hold CardSets
-        // Is the value of setNameInput contained in setNames?
-        //  - if not, 
-        //      - this is an invalid set (or you need to re-sync remotely)
-        //      - set an error message
-        //      - set some error flag so that other elements on the page respond appropriately
+    setNameInput.on("change", function(e) {
+        var setName = e.target.get("value");
+        var nameList = setNames.get("data");
+        var set = null;
+        
+        if (Y.Array.indexOf(nameList, setName) === -1) {
+            Y.log("OH NOES BAD SET NAME!!!");
+            // set some error message
+            // make sure other elements on the page respond appropriately
+            return;
+        }
+    
         // Is the value of setNameInput in the ModelList? 
         //  - if so, set the cardNameInput AutoComplete source to that card set's data object
         //  - if not,
@@ -61,6 +56,28 @@ YUI().use("mtg-prices", "autocomplete-plugin", "autocomplete-highlighters", "aut
         //      - create a new CardSet and add it to the ModelList
         //      - load the data remotely
         //      - eliminate the "loading data message"
+        set = setList.getById(setName);
+        if (! set) {
+            // set a "loading data" message
+            // this will be fast if the set is in localStorage, slow otherwise
+            Y.log("loading; card set '" + setName + "' not found in set list.");
+            set = new Y.MTG.Set({id: setName});
+            set.load(function(err, response) {
+                Y.log(set.get("data"));
+            });
+            setList.add(set);
+            // eliminate the "loading data" message
+        }
+        else {
+            Y.log("card set '" + setName + "' found in set list.");
+            Y.log(set.get("data"));
+        }
+        /*
+        cardNameInput.plug(Y.Plugin.AutoComplete, {
+            resultHighlighter: "phraseMatch",
+            resultFilters: "phraseMatch",
+            source: Y.Object.keys(set.get("data"))
+        });*/
     })
 });
 </script>
