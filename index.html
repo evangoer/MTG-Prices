@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<title>Magic: The Gathering Price Fetcher</title>
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?3.4.1/build/cssfonts/fonts-min.css&3.4.1/build/cssreset/reset-min.css&3.4.1/build/cssbase/base-min.css">
+
+<h1>Magic: The Gathering Price Fetcher</h1>
+
+<script src="http://yui.yahooapis.com/3.5.0pr1/build/yui/yui-min.js"></script>
+<script src="./lib/mtg.js"></script>
+<script>
+YUI().use('mtg', function (Y) {
+    Y.log('Hello');
+    var setNames = new Y.MTG.SetNames();
+    setNames.load(function (err, res) {
+        Y.log(setNames.toJSON())
+    })
+});
+</script>
