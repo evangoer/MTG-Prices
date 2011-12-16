@@ -8,10 +8,18 @@
 <script src="./lib/mtg.js"></script>
 <script>
 YUI().use('mtg', function (Y) {
-    Y.log('Hello');
     var setNames = new Y.MTG.SetNames();
+    var set = new Y.MTG.Set({ name: 'Zendikar' });
+    
     setNames.load(function (err, res) {
-        Y.log(setNames.toJSON())
-    })
+        Y.log(setNames.toJSON());
+    });
+    
+    set.load(function (err, res) {
+        Y.log('Done loading the set')
+        set.each(function (card) {
+            Y.log(card.get('name'))
+        });
+    });
 });
 </script>
